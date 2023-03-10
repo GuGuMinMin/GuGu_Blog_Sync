@@ -167,9 +167,9 @@ public class HaloSiteImpl implements ISite {
         List<Integer> idList = new LinkedList<>();
         if (CollectionUtils.isEmpty(needCreateList)) {
             JSONArray dataJsonArray = JsonPath.read(getResponseJson, "$.data");
-            for (Object categoriesObject : dataJsonArray) {
-                if (categoriesObject instanceof Map<?, ?>) {
-                    Map<?, ?> categoriesMap = (Map<?, ?>) categoriesObject;
+            for (Object jsonObject : dataJsonArray) {
+                if (jsonObject instanceof Map<?, ?>) {
+                    Map<?, ?> categoriesMap = (Map<?, ?>) jsonObject;
                     if (nameList.contains(categoriesMap.get("name").toString())) {
                         idList.add((Integer) categoriesMap.get("id"));
                     }
