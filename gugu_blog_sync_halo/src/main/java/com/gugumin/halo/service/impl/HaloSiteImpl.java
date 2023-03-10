@@ -146,7 +146,7 @@ public class HaloSiteImpl implements ISite {
             return Collections.emptyList();
         }
         synchronized (TAG_MONITOR) {
-            return getIntegerListFromCategoryOrTag(tagNameList, false);
+            return getIdListFromCategoryOrTag(tagNameList, false);
         }
     }
 
@@ -155,11 +155,11 @@ public class HaloSiteImpl implements ISite {
             return Collections.emptyList();
         }
         synchronized (CATEGORIES_MONITOR) {
-            return getIntegerListFromCategoryOrTag(categoriesNameList, true);
+            return getIdListFromCategoryOrTag(categoriesNameList, true);
         }
     }
 
-    private List<Integer> getIntegerListFromCategoryOrTag(List<String> nameList, boolean isCategory) {
+    private List<Integer> getIdListFromCategoryOrTag(List<String> nameList, boolean isCategory) {
         String getResponseJson = isCategory ? haloApi.getCategories() : haloApi.getTags();
         JSONArray categoriesNameJsonArray = JsonPath.read(getResponseJson, "$..name");
         List<String> haloNameList = categoriesNameJsonArray.stream().map(Object::toString).collect(Collectors.toList());
