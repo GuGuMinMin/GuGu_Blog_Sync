@@ -1,9 +1,12 @@
 package com.gugumin.halo.pojo.response;
 
 import com.gugumin.pojo.Article;
+import com.gugumin.pojo.Meta;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -53,16 +56,23 @@ public class PostsResponse {
      * @return the article
      */
     public Article toArticle() {
-        String newContent = "<!--" +
-                "categories=" +
-                categories.stream().map(Categories::getName).collect(Collectors.toList()) +
-                "," +
-                "tags=" +
-                tags.stream().map(Tags::getName).collect(Collectors.toList()) +
-                "-->" +
-                System.lineSeparator() +
-                originalContent;
-        return new Article(title, newContent);
+        Meta meta = new Meta();
+        Map<Integer, Categories> categoriesMap = categories.stream().collect(Collectors.toMap(Categories::getId, item -> item));
+        meta.setCategories(categories.stream().map(item -> {
+            Meta.Category category = new Meta.Category();
+            category.setName(item.getName());
+            if (Objects.nonNull(item.getParentId())) {
+                Categories parent = categoriesMap.get(item.getParentId());
+                category.setParent(parent.name);
+            }
+            return category;
+        }).collect(Collectors.toList()));
+        meta.setTags(tags.stream().map(item -> {
+            Meta.Tag tag = new Meta.Tag();
+            tag.setName(item.getName());
+            return tag;
+        }).collect(Collectors.toList()));
+        return new Article(title, originalContent, meta);
     }
 
     /**
