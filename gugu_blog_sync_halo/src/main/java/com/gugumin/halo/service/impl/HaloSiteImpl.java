@@ -21,8 +21,6 @@ import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -35,9 +33,6 @@ import java.util.stream.Collectors;
 @Service
 public class HaloSiteImpl implements ISite {
     private static final String DEFAULT_EDITOR_TYPE = "MARKDOWN";
-    private static final String SPLIT_CHAR = ",";
-    private static final Pattern CATEGORIES_PATTERN = Pattern.compile("(?<=<!--categories=\\[).*(?=\\],)");
-    private static final Pattern TAG_PATTERN = Pattern.compile("(?<=tags=\\[).*(?=\\]-->)");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool(r -> new Thread(r, "haloSite-task"));
     private static final Object CATEGORIES_MONITOR = new Object();
     private static final Object TAG_MONITOR = new Object();
@@ -195,25 +190,6 @@ public class HaloSiteImpl implements ISite {
             idList.add(categoriesId);
         }
         return idList;
-    }
-
-    private Map<String, List<String>> getCategoriesAndTagsData(Article article) {
-        Map<String, List<String>> metaList = new LinkedHashMap<>();
-        metaList.put("categories", new LinkedList<>());
-        metaList.put("tags", new LinkedList<>());
-        Matcher categoriesMatcher = CATEGORIES_PATTERN.matcher(article.getContext());
-        if (categoriesMatcher.find()) {
-            String categoriesGroup = categoriesMatcher.group();
-            List<String> categoriesNameList = Arrays.stream(categoriesGroup.split(SPLIT_CHAR)).map(String::trim).collect(Collectors.toList());
-            metaList.get("categories").addAll(categoriesNameList);
-        }
-        Matcher tagMatcher = TAG_PATTERN.matcher(article.getContext());
-        if (tagMatcher.find()) {
-            String tagGroup = tagMatcher.group();
-            List<String> tagNameList = Arrays.stream(tagGroup.split(SPLIT_CHAR)).map(String::trim).collect(Collectors.toList());
-            metaList.get("tags").addAll(tagNameList);
-        }
-        return metaList;
     }
 
     @SneakyThrows
