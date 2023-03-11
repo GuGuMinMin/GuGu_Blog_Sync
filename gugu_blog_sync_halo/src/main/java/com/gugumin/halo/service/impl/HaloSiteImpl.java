@@ -135,6 +135,7 @@ public class HaloSiteImpl implements ISite {
         postsRequest.setTitle(article.getName());
         postsRequest.setEditorType(DEFAULT_EDITOR_TYPE);
         postsRequest.setStatus(PostsStatus.PUBLISHED.getValue());
+        postsRequest.setSummary(article.getMeta().getSummary());
         postsRequest.setKeepRaw(false);
         return postsRequest;
     }

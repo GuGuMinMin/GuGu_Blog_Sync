@@ -74,6 +74,7 @@ public class PostsResponse {
             tag.setName(item.getName());
             return tag;
         }).collect(Collectors.toList()));
+        meta.setSummary(summary);
         return new Article(title, originalContent, meta, metaType);
     }
 
