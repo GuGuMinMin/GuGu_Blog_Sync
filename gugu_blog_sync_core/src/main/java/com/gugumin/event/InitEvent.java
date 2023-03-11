@@ -39,7 +39,7 @@ public class InitEvent implements ApplicationListener<ApplicationStartedEvent> {
      *
      * @param siteObserver the site observer
      * @param config       the config
-     * @param gitService
+     * @param gitService   gitService
      */
     public InitEvent(SiteObserver siteObserver, Config config, IGitService gitService) {
         this.siteObserver = siteObserver;
@@ -61,6 +61,7 @@ public class InitEvent implements ApplicationListener<ApplicationStartedEvent> {
             log.info("工作目录下git仓库初始化完成");
             tryPullSiteData2Repository(repositoryPath);
         }
+        log.info("应用初始化完毕 正在监听webhook");
     }
 
     @SneakyThrows
@@ -75,7 +76,7 @@ public class InitEvent implements ApplicationListener<ApplicationStartedEvent> {
             String fileName = article.getName() + ".md";
             if (Files.notExists(repositoryPath.resolve(fileName))) {
                 EXECUTOR_SERVICE.execute(() -> {
-                    FileUtil.write(repositoryPath.resolve(fileName), Article.parseMetaFromContext(article.getContext()).generateMetaAndContext(article));
+                    FileUtil.write(repositoryPath.resolve(fileName), article.getMetaType().generateMetaAndContext(article));
                     log.info("成功将站点文章写入到 {}", repositoryPath.resolve(fileName));
                     countDownLatch.countDown();
                 });
