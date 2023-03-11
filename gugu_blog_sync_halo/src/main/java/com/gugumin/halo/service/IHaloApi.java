@@ -11,6 +11,7 @@ import java.util.List;
  * @author minmin
  * @date 2023 /03/08
  */
+@Retry(maxRetryCount = "3", maxRetryInterval = "300")
 public interface IHaloApi {
     /**
      * Login string.
@@ -43,7 +44,6 @@ public interface IHaloApi {
      * Del posts string.
      *
      * @param idList the id list
-     * @return the string
      */
     @Delete(url = "${url}/api/admin/posts", headers = {"ADMIN-Authorization: ${token}"})
     void delPosts(@JSONBody List<Integer> idList);
