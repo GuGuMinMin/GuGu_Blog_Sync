@@ -1,10 +1,12 @@
 package com.gugumin.halo.service.impl;
 
+import com.gugumin.halo.config.HaloConfig;
 import com.gugumin.halo.pojo.request.*;
 import com.gugumin.halo.pojo.response.PostsResponse;
 import com.gugumin.halo.service.IHaloApi;
 import com.gugumin.halo.utils.JsonUtil;
 import com.gugumin.pojo.Article;
+import com.gugumin.pojo.Meta;
 import com.gugumin.service.core.ISite;
 import com.jayway.jsonpath.JsonPath;
 import lombok.SneakyThrows;
@@ -41,6 +43,8 @@ public class HaloSiteImpl implements ISite {
     private static final Object TAG_MONITOR = new Object();
     @Resource
     private IHaloApi haloApi;
+    @Resource
+    private HaloConfig haloConfig;
 
 
     @PreDestroy
@@ -68,7 +72,7 @@ public class HaloSiteImpl implements ISite {
                     log.debug("haloApi.getPost()={}", responseJson);
                     Map<String, String> dataMap = JsonPath.read(responseJson, "$.data");
                     PostsResponse postsResponse = JsonUtil.json2Obj(JsonUtil.obj2Json(dataMap), PostsResponse.class);
-                    synchronizedList.add(postsResponse.toArticle());
+                    synchronizedList.add(postsResponse.toArticle(haloConfig.getMetaType()));
                 } finally {
                     countDownLatch.countDown();
                 }
@@ -111,10 +115,9 @@ public class HaloSiteImpl implements ISite {
     }
 
     private void createOrUpdatePosts(Article article, boolean isCreate) {
-        Map<String, List<String>> metaList = getCategoriesAndTagsData(article);
-        List<String> categoriesNameList = metaList.get("categories");
+        List<String> categoriesNameList = article.getMeta().getCategories().stream().map(Meta.Category::getName).collect(Collectors.toList());
         List<Integer> categoriesIdList = createCategoriesList(categoriesNameList);
-        List<String> tagNameList = metaList.get("tags");
+        List<String> tagNameList = article.getMeta().getTags().stream().map(Meta.Tag::getName).collect(Collectors.toList());
         List<Integer> tagIdList = createTagList(tagNameList);
         PostsRequest postsRequest = createPostRequest(article, categoriesIdList, tagIdList);
         if (isCreate) {

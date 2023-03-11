@@ -57,7 +57,7 @@ public class PostsResponse {
      *
      * @return the article
      */
-    public Article toArticle() {
+    public Article toArticle(MetaType metaType) {
         Meta meta = new Meta();
         Map<Integer, Categories> categoriesMap = categories.stream().collect(Collectors.toMap(Categories::getId, item -> item));
         meta.setCategories(categories.stream().map(item -> {
@@ -74,10 +74,7 @@ public class PostsResponse {
             tag.setName(item.getName());
             return tag;
         }).collect(Collectors.toList()));
-        Article article = new Article(title, originalContent, meta);
-        String context = MetaType.YAML.generateMetaAndContext(article);
-        article.setContext(context);
-        return article;
+        return new Article(title, originalContent, meta, metaType);
     }
 
     /**

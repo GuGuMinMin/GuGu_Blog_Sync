@@ -1,6 +1,7 @@
 package com.gugumin.halo.config;
 
 import com.dtflys.forest.Forest;
+import com.gugumin.pojo.MetaType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -24,9 +25,19 @@ public class HaloConfig {
     private String url;
     private String username;
     private String password;
+    private String metaType;
 
     @PostConstruct
     private void init() {
         Forest.config().setVariableValue("url", url);
+    }
+
+    public MetaType getMetaType() {
+        for (MetaType type : MetaType.values()) {
+            if (type.getValue().equalsIgnoreCase(metaType)) {
+                return type;
+            }
+        }
+        return MetaType.YAML;
     }
 }
