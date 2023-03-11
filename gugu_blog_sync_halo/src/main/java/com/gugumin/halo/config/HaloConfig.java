@@ -28,7 +28,7 @@ public class HaloConfig {
     private String metaType;
 
     @PostConstruct
-    private void init() {
+    private void initForestVar() {
         Forest.config().setVariableValue("url", url);
     }
 
