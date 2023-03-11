@@ -27,7 +27,7 @@
         <java.version>11</java.version>
         <spring-boot.version>2.7.9</spring-boot.version>
         <jgit.version>6.4.0.202211300538-r</jgit.version>
-        <forest.version>1.5.28</forest.version>
+        <forest.version>1.5.30</forest.version>
     </properties>
 
     <dependencyManagement>
@@ -43,6 +43,11 @@
                 <groupId>org.eclipse.jgit</groupId>
                 <artifactId>org.eclipse.jgit</artifactId>
                 <version>${jgit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dtflys.forest</groupId>
+                <artifactId>forest-spring-boot-starter</artifactId>
+                <version>${forest.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
