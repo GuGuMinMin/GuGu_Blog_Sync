@@ -2,11 +2,13 @@ package com.gugumin.halo.pojo.response;
 
 import com.gugumin.pojo.Article;
 import com.gugumin.pojo.Meta;
+import com.gugumin.pojo.MetaType;
 import lombok.Data;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +65,7 @@ public class PostsResponse {
             category.setName(item.getName());
             if (Objects.nonNull(item.getParentId())) {
                 Categories parent = categoriesMap.get(item.getParentId());
-                category.setParent(parent.name);
+                Optional.ofNullable(parent).ifPresent(parentItem -> category.setParent(parentItem.name));
             }
             return category;
         }).collect(Collectors.toList()));
@@ -72,7 +74,10 @@ public class PostsResponse {
             tag.setName(item.getName());
             return tag;
         }).collect(Collectors.toList()));
-        return new Article(title, originalContent, meta);
+        Article article = new Article(title, originalContent, meta);
+        String context = MetaType.YAML.generateMetaAndContext(article);
+        article.setContext(context);
+        return article;
     }
 
     /**
