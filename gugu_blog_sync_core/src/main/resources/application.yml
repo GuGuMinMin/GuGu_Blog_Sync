@@ -18,3 +18,7 @@ server:
 logging:
   file:
     name: ${core-config.workspace}/logs/gugu_blog_sync_core.log
+halo-config:
+  url:
+  username:
+  password:

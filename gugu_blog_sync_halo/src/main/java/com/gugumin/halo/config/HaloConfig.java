@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import javax.annotation.PostConstruct;
 
@@ -20,8 +19,8 @@ import javax.annotation.PostConstruct;
 @Getter
 @Configuration
 @ConfigurationProperties("halo-config")
-@PropertySource("classpath:halo-config.properties")
 public class HaloConfig {
+    private static final String END_WITH_CHAR = "/";
     private String url;
     private String username;
     private String password;
@@ -29,6 +28,10 @@ public class HaloConfig {
 
     @PostConstruct
     private void initForestVar() {
+        String url = this.url;
+        if (url.endsWith(END_WITH_CHAR)) {
+            url = url.substring(0, url.length() - 1);
+        }
         Forest.config().setVariableValue("url", url);
     }
 
