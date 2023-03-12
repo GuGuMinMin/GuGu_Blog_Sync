@@ -1,0 +1,24 @@
+core-config:
+    workspace: ${user.home}/${spring.application.name}
+    proxy:
+        open: false
+        host:
+        port:
+    git:
+        username:
+        token:
+        repository:
+spring:
+    application:
+        name: GuGu_Blog_Sync_Halo
+server:
+    port: 19091
+    servlet:
+        context-path: /
+logging:
+    file:
+        name: ${core-config.workspace}/logs/gugu_blog_sync.log
+halo-config:
+    url:
+    username:
+    password:

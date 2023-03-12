@@ -21,34 +21,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>com.gugumin</groupId>
+            <artifactId>gugu_blog_sync_starter</artifactId>
+            <version>${parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dtflys.forest</groupId>
             <artifactId>forest-spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.gugumin</groupId>
-            <artifactId>gugu_blog_sync_common</artifactId>
-            <version>${parent.version}</version>
         </dependency>
     </dependencies>
 
@@ -62,6 +41,21 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>com.gugumin.halo.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
